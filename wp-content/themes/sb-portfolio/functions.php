@@ -151,6 +151,29 @@ function sb_portfolio_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+	/*
+	 * Custom Enqueue
+	 */
+	wp_enqueue_style('google-font-1','https://fonts.googleapis.com/css?family=Karla:400,700',array(),time());
+	wp_enqueue_style('google-font-2','https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700',array(),time());
+	wp_enqueue_style('animate.css',get_template_directory_uri().'/assets/css/animate.css',array(),time());
+	wp_enqueue_style('icomoon.css',get_template_directory_uri().'/assets/css/icomoon.css',array(),time());
+	wp_enqueue_style('bootstrap.css',get_template_directory_uri().'/assets/css/bootstrap.css',array(),time());
+	wp_enqueue_style('owl.carousel.min.css',get_template_directory_uri().'/assets/css/owl.carousel.min.css',array(),time());
+	wp_enqueue_style('owl.theme.default.min.css',get_template_directory_uri().'/assets/css/owl.theme.default.min.css',array(),time());
+	wp_enqueue_style('magnific-popup.css',get_template_directory_uri().'/assets/css/magnific-popup.css',array(),time());
+	wp_enqueue_style('style.css-theme',get_template_directory_uri().'/assets/css/style.css',array(),time());
+
+	wp_enqueue_script('modernizr-2.6.2.min.js',get_template_directory_uri().'/assets/js/modernizr-2.6.2.min.js',array(),time(),false);
+	wp_enqueue_script('respond.min.js',get_template_directory_uri().'/assets/js/respond.min.js',array(),time(),false);
+	wp_enqueue_script('jquery.min.js',get_template_directory_uri().'/assets/js/jquery.min.js',array(),time(),true);
+	wp_enqueue_script('jquery.easing.1.3.js',get_template_directory_uri().'/assets/js/jquery.easing.1.3.js',array(),time(),true);
+	wp_enqueue_script('bootstrap.min.js',get_template_directory_uri().'/assets/js/bootstrap.min.js',array(),time(),true);
+	wp_enqueue_script('jquery.waypoints.min.js',get_template_directory_uri().'/assets/js/jquery.waypoints.min.js',array(),time(),true);
+	wp_enqueue_script('owl.carousel.min.js',get_template_directory_uri().'/assets/js/owl.carousel.min.js',array(),time(),true);
+	wp_enqueue_script('jquery.magnific-popup.min.js',get_template_directory_uri().'/assets/js/jquery.magnific-popup.min.js',array(),time(),true);
+	wp_enqueue_script('magnific-popup-options.js',get_template_directory_uri().'/assets/js/magnific-popup-options.js',array(),time(),true);
+	wp_enqueue_script('main.js',get_template_directory_uri().'/assets/js/main.js',array(),time(),true);
 }
 add_action( 'wp_enqueue_scripts', 'sb_portfolio_scripts' );
 
@@ -175,9 +198,6 @@ require get_template_directory() . '/inc/template-functions.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**
- * Load Jetpack compatibility file.
+ * Implementing Custom Post Types
  */
-if ( defined( 'JETPACK__VERSION' ) ) {
-	require get_template_directory() . '/inc/jetpack.php';
-}
-
+require get_template_directory().'/cpts/work.php';
