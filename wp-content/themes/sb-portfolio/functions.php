@@ -50,7 +50,7 @@ if ( ! function_exists( 'sb_portfolio_setup' ) ) :
 		// This theme uses wp_nav_menu() in one location.
 		register_nav_menus(
 			array(
-				'menu-1' => esc_html__( 'Primary', 'sb-portfolio' ),
+				'primary-menu' => esc_html__( 'Primary Menu', 'sb-portfolio' ),
 			)
 		);
 

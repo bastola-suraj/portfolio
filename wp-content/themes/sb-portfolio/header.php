@@ -5,21 +5,21 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="author" content="Suraj Bastola" />
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="author" content="Suraj Bastola"/>
     <meta property="og:title" content=""/>
     <meta property="og:image" content=""/>
     <meta property="og:url" content=""/>
     <meta property="og:site_name" content=""/>
     <meta property="og:description" content=""/>
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:image" content="" />
-    <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
-    <?php
-    wp_head();
-    ?>
+    <meta name="twitter:title" content=""/>
+    <meta name="twitter:image" content=""/>
+    <meta name="twitter:url" content=""/>
+    <meta name="twitter:card" content=""/>
+	<?php
+	wp_head();
+	?>
 </head>
 <body <?php body_class(); ?> >
 <nav id="colorlib-main-nav" role="navigation">
@@ -29,38 +29,41 @@
             <div class="row">
                 <div class="col-md-12">
                     <form class="form-group">
-                        <input type="text" class="form-control" id="search" name="s" placeholder="Enter any key to search...">
+                        <input type="text" class="form-control" id="search" name="s"
+                               placeholder="Enter any key to search...">
                         <button type="submit" class="btn btn-primary"><i class="icon-search3"></i></button>
                     </form>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <ul>
-                        <li class="active"><a href="index.html">Home</a></li>
-                        <li><a href="services.html">Services</a></li>
-                        <li><a href="work.html">Work</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
+					<?php wp_nav_menu( 'primary-menu' ); ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="head-title">Works</h2>
-                    <a href="<?php echo get_template_directory_uri()?>/assets/images/work-1.jpg" class="gallery image-popup-link text-center" style="background-image: url(<?php echo get_template_directory_uri()?>/images/work-1.jpg);">
-                        <span><i class="icon-search3"></i></span>
-                    </a>
-                    <a href="images/work-2.jpg" class="gallery image-popup-link text-center" style="background-image: url(images/work-2.jpg);">
-                        <span><i class="icon-search3"></i></span>
-                    </a>
-                    <a href="images/work-3.jpg" class="gallery image-popup-link text-center" style="background-image: url(images/work-3.jpg);">
-                        <span><i class="icon-search3"></i></span>
-                    </a>
-                    <a href="images/work-4.jpg" class="gallery image-popup-link text-center" style="background-image: url(images/work-4.jpg);">
-                        <span><i class="icon-search3"></i></span>
-                    </a>
+					<?php
+					$args  = array(
+						'post_type'      => 'works',
+						'posts_per_page' => 4
+					);
+					$query = new WP_Query( $args );
+					if ( $query->have_posts() ):
+						while ( $query->have_posts() ):
+							$query->the_post();
+					$attachment = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID),'large',true);
+
+							?>
+                            <a href="<?php echo $attachment[0]; ?>" class="gallery image-popup-link text-center"
+                               style="background-image: url(<?php echo $attachment[0]; ?>);">
+                                <span><i class="icon-search3"></i></span>
+                            </a>
+						<?php
+						endwhile;
+						wp_reset_postdata();
+					endif;
+					?>
                 </div>
             </div>
         </div>
