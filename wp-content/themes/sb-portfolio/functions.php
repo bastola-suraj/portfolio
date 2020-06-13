@@ -101,6 +101,20 @@ if ( ! function_exists( 'sb_portfolio_setup' ) ) :
 			)
 		);
 	}
+	function new_excerpt_more( $more ) {
+		return '...';
+	}
+	add_filter('excerpt_more', 'new_excerpt_more');
+	function custom_excerpt_length( $length ) {
+		// return 20;
+		if (is_home()) {
+			return 70;
+		} else {
+			return 20;
+		}
+
+	}
+	add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
 endif;
 add_action( 'after_setup_theme', 'sb_portfolio_setup' );
 
@@ -125,10 +139,22 @@ add_action( 'after_setup_theme', 'sb_portfolio_content_width', 0 );
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
 function sb_portfolio_widgets_init() {
-	register_sidebar(
+//	register_sidebar(
+//		array(
+//			'name'          => esc_html__( 'Sidebar', 'sb-portfolio' ),
+//			'id'            => 'sidebar-1',
+//			'description'   => esc_html__( 'Add widgets here.', 'sb-portfolio' ),
+//			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+//			'after_widget'  => '</section>',
+//			'before_title'  => '<h2 class="widget-title">',
+//			'after_title'   => '</h2>',
+//		)
+//	);
+	for($i=0;$i<4;$i++):
+	register_sidebars(
 		array(
-			'name'          => esc_html__( 'Sidebar', 'sb-portfolio' ),
-			'id'            => 'sidebar-1',
+			'name'          => esc_html__( 'Footer Widget '.$i, 'sb-portfolio' ),
+			'id'            => 'footer-widget-'.$i,
 			'description'   => esc_html__( 'Add widgets here.', 'sb-portfolio' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
@@ -136,6 +162,7 @@ function sb_portfolio_widgets_init() {
 			'after_title'   => '</h2>',
 		)
 	);
+	endfor;
 }
 add_action( 'widgets_init', 'sb_portfolio_widgets_init' );
 

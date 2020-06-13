@@ -170,66 +170,211 @@ endif;
     <!--Services Section-->
 
     <!--Portfolio Section-->
-    <div id="colorlib-work">
+<?php
+$args  = array(
+	'page_id' => 84,
+);
+$query = new WP_Query( $args );
+if ( $query->have_posts() ):
+	while ( $query->have_posts() ):
+		$query->the_post(); ?>
+        <div id="colorlib-work">
+            <div class="container">
+                <div class="row text-center">
+                    <h2 class="bold"><?php echo the_title(); ?></h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-md-offset-0 text-center animate-box intro-heading">
+                        <span><?php the_title()?></span>
+                        <h2>Done Projects</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="rotate">
+                            <h2 class="heading">Portfolio</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+					<?php
+					$args  = array(
+						'post_type'      => 'works',
+						'posts_per_page' => 4,
+					);
+					$query2 = new WP_Query( $args );
+					if ( $query2->have_posts() ):
+						while ( $query2->have_posts() ):
+							$query2->the_post();
+							$attachment = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'large', true );
+							?>
+                            <div class="col-md-12">
+                                <div class="work-entry animate-box">
+                                    <a href="<?php echo get_field( 'live_site' ); ?>" class="work-img"
+                                       style="background-image: url(<?php echo $attachment[0]; ?>);">
+                                        <div class="display-t">
+                                            <div class="work-name">
+                                                <h2><?php the_title() ?></h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="col-md-4 col-md-offset-4">
+                                        <div class="desc">
+                                            <p><?php the_content(); ?></p>
+                                            <p class="read"><a href="<?php echo get_field( 'live_site' ); ?>">View
+                                                    details</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						<?php
+
+						endwhile;
+//						wp_reset_postdata();
+					endif;
+					?>
+                </div>
+            </div>
+        </div>
+	<?php
+	endwhile;
+	wp_reset_postdata();
+endif;
+?>
+    <!--Portfolio Section-->
+
+<!--Blog Section-->
+<?php
+$args  = array(
+	'page_id' => 86,
+);
+$query = new WP_Query( $args );
+if ( $query->have_posts() ):
+	while ( $query->have_posts() ):
+		$query->the_post(); ?>
+    <div id="colorlib-blog">
         <div class="container">
             <div class="row text-center">
-				<?php
-				$post_type = get_post_type( get_the_ID() );
-				?>
-                <h2 class="bold"><?php echo $post_type; ?></h2>
+                <h2 class="bold">Blog</h2>
             </div>
             <div class="row">
                 <div class="col-md-12 col-md-offset-0 text-center animate-box intro-heading">
-                    <span>Portfolio</span>
-                    <h2>Done Projects</h2>
+                    <span><?php the_title()?></span>
+                    <h2>Blogs</h2>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="rotate">
-                        <h2 class="heading">Portfolio</h2>
+                        <h2 class="heading"><?php the_title(); ?></h2>
                     </div>
                 </div>
             </div>
-            <div class="row">
-				<?php
-				$args  = array(
-					'post_type'      => 'works',
-					'posts_per_page' => 4,
-				);
-				$query = new WP_Query( $args );
-				if ( $query->have_posts() ):
-					while ( $query->have_posts() ):
-						$query->the_post();
-				$attachment = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID),'large',true);
-						?>
+            <div class="row animate-box">
+                <div class="owl-carousel1">
+		<?php
+		$args  = array(
+			'post_type'      => 'post',
+			'posts_per_page' => 4,
+		);
+		$query2 = new WP_Query( $args );
+		if ( $query2->have_posts() ):
+			while ( $query2->have_posts() ):
+				$query2->the_post();
+				$attachment = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'large', true );
+				?>
+                    <div class="item">
                         <div class="col-md-12">
-                            <div class="work-entry animate-box">
-                                <a href="<?php the_permalink(); ?>" class="work-img" style="background-image: url(<?php echo $attachment[0]; ?>);">
-                                    <div class="display-t">
-                                        <div class="work-name">
-                                            <h2><?php the_title()?></h2>
-                                        </div>
+                            <div class="article">
+                                <a href="<?php the_permalink();?>" class="blog-img">
+                                    <img class="img-responsive" src="<?php echo $attachment[0]; ?>" alt="html5 bootstrap by colorlib.com">
+                                    <div class="overlay"></div>
+                                    <div class="link">
+											<span class="read">Read more</h2>
+<!--											<h2 class="read">Read more</h2>-->
                                     </div>
                                 </a>
-                                <div class="col-md-4 col-md-offset-4">
-                                    <div class="desc">
-                                        <p><?php the_content(); ?></p>
-                                        <p class="read"><a href="<?php echo get_field('live_site'); ?>">View details</a></p>
-                                    </div>
+                                <div class="desc">
+                                    <span class="meta"><?php the_date('d M, Y'); ?></span>
+                                    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                                    <?php the_excerpt(); ?>
                                 </div>
                             </div>
                         </div>
-					<?php
+                    </div>
+			<?php
 
-					endwhile;
-					wp_reset_postdata();
-				endif;
-				?>
+			endwhile;
+//						wp_reset_postdata();
+		endif;
+		?>
+                </div>
             </div>
         </div>
     </div>
+	<?php
+	endwhile;
+	wp_reset_postdata();
+endif;
+?>
+<!--Blog Section-->
 
-    <!--Portfolio Section-->
+<!--Testimonies Section-->
+    <div id="colorlib-testimony">
+        <div class="container">
+            <div class="row text-center">
+                <h2 class="bold">Testimonies</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-md-offset-0 text-center animate-box intro-heading">
+                    <span>Testimonies</span>
+                    <h2>Clients Says</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="rotate">
+                        <h2 class="heading">Says</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row animate-box">
+                <div class="owl-carousel">
+                    <div class="item">
+                        <div class="col-md-12 text-center">
+                            <div class="testimony">
+                                <blockquote>
+                                    <p>"A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+                                    <span>" &mdash; George Brooks</span>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="col-md-12 text-center">
+                            <div class="testimony">
+                                <blockquote>
+                                    <p>"Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
+                                    <span>" &mdash; Daniel Foster</span>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="col-md-12 text-center">
+                            <div class="testimony">
+                                <blockquote>
+                                    <p>"When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove</p>
+                                    <span>" &mdash; Liam Jenkins</span>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--Testimonies Section-->
+
 <?php
 get_footer();
