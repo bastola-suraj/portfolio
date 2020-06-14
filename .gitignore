@@ -3,6 +3,7 @@ wp-includes
 wp-content/plugins
 #wp-content/index.php
 wp-content/themes/noah
+wp-content/themes/twentytwenty
 wp-content/upgrade
 wp-content/uploads
 #wp-content/themes/index.php

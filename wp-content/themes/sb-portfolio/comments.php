@@ -18,60 +18,61 @@
 if ( post_password_required() ) {
 	return;
 }
+
 ?>
-
-<div id="comments" class="comments-area">
-
+<div class="comment-box animate-box">
+    <h2 class="colorlib-heading-2"><? echo comments_number( 'No comments yet', 'One comment', '% Comments' ) ?></h2>
 	<?php
-	// You can start editing here -- including this comment!
-	if ( have_comments() ) :
-		?>
-		<h2 class="comments-title">
-			<?php
-			$sb_portfolio_comment_count = get_comments_number();
-			if ( '1' === $sb_portfolio_comment_count ) {
-				printf(
-					/* translators: 1: title. */
-					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'sb-portfolio' ),
-					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
-				);
-			} else {
-				printf( 
-					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $sb_portfolio_comment_count, 'comments title', 'sb-portfolio' ) ),
-					number_format_i18n( $sb_portfolio_comment_count ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					'<span>' . wp_kses_post( get_the_title() ) . '</span>'
-				);
-			}
+	wp_list_comments( array(
+		'callback' => function ( $comment, $args, $depth ) {
 			?>
-		</h2><!-- .comments-title -->
+            <div class="comment-post">
 
-		<?php the_comments_navigation(); ?>
+                <div class="desc">
+                    <h3>
+                        <div class="user">
+							<?php
+							if ( $args['avatar_size'] != 0 ) {
+								echo get_avatar( $comment, $args['avatar_size'] );
+							}
+							?>
+							<?php printf( __( '%s' ), get_comment_author_link() ); ?> <span><i class="icon-calendar"></i> <?php echo get_comment_date(); ?></span>
+                        </div>
+						<?php
+						if ( $comment->comment_approved == 0 ) {
+							?>
+                            <small><span><?php _e( 'Your Comment is awaiting approval' ); ?></span></small>
+							<?php
+						}
+						?>
+                    </h3>
+                    <?php comment_text(); ?>
+                </div>
+            </div>
+            <span>
+                <?php comment_reply_link(
+	                array_merge(
+		                $args,
+		                array(
+			                'add_below' => 'Reply',
+			                'depth'     => $depth,
+			                'max_depth' => $args['max_depth'],
+		                )
+	                )
+                );
+                ?>
+            </span>
+            <span>
+                <?php edit_comment_link( __( '(Edit)' ), '', '' ); ?><br>
+            </span>
 
-		<ol class="comment-list">
 			<?php
-			wp_list_comments(
-				array(
-					'style'      => 'ol',
-					'short_ping' => true,
-				)
-			);
-			?>
-		</ol><!-- .comment-list -->
-
-		<?php
-		the_comments_navigation();
-
-		// If comments are closed and there are comments, let's leave a little note, shall we?
-		if ( ! comments_open() ) :
-			?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'sb-portfolio' ); ?></p>
-			<?php
-		endif;
-
-	endif; // Check for have_comments().
-
-	comment_form();
+		}
+	) );
 	?>
+</div>
 
-</div><!-- #comments -->
+<div class="comment-area animate-box">
+<!--    <h2 class="colorlib-heading-2">Leave a comment</h2>-->
+	<?php comment_form(); ?>
+</div>

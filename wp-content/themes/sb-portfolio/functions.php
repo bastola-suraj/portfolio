@@ -101,13 +101,15 @@ if ( ! function_exists( 'sb_portfolio_setup' ) ) :
 			)
 		);
 	}
+
 	function new_excerpt_more( $more ) {
 		return '...';
 	}
-	add_filter('excerpt_more', 'new_excerpt_more');
+
+	add_filter( 'excerpt_more', 'new_excerpt_more' );
 	function custom_excerpt_length( $length ) {
 		// return 20;
-		if (is_home()) {
+		if ( is_home() ) {
 			return 70;
 		} else {
 			return 20;
@@ -115,6 +117,46 @@ if ( ! function_exists( 'sb_portfolio_setup' ) ) :
 
 	}
 	add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
+
+	add_filter('term_links-post_tag','limit_to_five_tags');
+	function limit_to_five_tags($terms) {
+		return array_slice($terms,0,100,true);
+	}
+	function wpb_related_author_posts($content) {
+
+		if ( is_single() ) {
+			global $authordata, $post;
+
+			$content .= '<h4>Similar Posts by The Author:</h4> ';
+
+			$authors_posts = get_posts( array( 'author' => $authordata->ID, 'post__not_in' => array( $post->ID ), 'posts_per_page' => 5 ) );
+
+			$content .= '<ul>';
+			foreach ( $authors_posts as $authors_post ) {
+				$content .= '<li><a href="' . get_permalink( $authors_post->ID ) . '">' . apply_filters( 'the_title', $authors_post->post_title, $authors_post->ID ) . '</a></li>';
+			}
+			$content .= '</ul>';
+
+			return $content;
+		}
+		else {
+			return $content;
+		}
+	}
+
+	add_filter('the_content','wpb_related_author_posts');
+	function my_change_comment_date_format( $date, $date_format, $comment ) {
+		return date( 'F j', strtotime( $comment->comment_date ) );
+	}
+	add_filter( 'get_comment_date', 'my_change_comment_date_format', 10, 3 );
+
+	function wporg_more_comments( $content ) {
+    echo '123';
+    return $content;
+    add_filter('wp_comment_reply','wporg_more_comments',5,1);
+}
+
+add_filter( 'wp_comment_reply', 'wporg_more_comments', 5, 1 );
 endif;
 add_action( 'after_setup_theme', 'sb_portfolio_setup' );
 
@@ -131,6 +173,7 @@ function sb_portfolio_content_width() {
 	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 	$GLOBALS['content_width'] = apply_filters( 'sb_portfolio_content_width', 640 );
 }
+
 add_action( 'after_setup_theme', 'sb_portfolio_content_width', 0 );
 
 /**
@@ -150,20 +193,19 @@ function sb_portfolio_widgets_init() {
 //			'after_title'   => '</h2>',
 //		)
 //	);
-	for($i=0;$i<4;$i++):
-	register_sidebars(
-		array(
-			'name'          => esc_html__( 'Footer Widget '.$i, 'sb-portfolio' ),
-			'id'            => 'footer-widget-'.$i,
+	for ( $i = 1; $i < 5; $i ++ ):
+		register_sidebar( array(
+			'name'          => esc_html__( 'Footer Widget ' . $i, 'sb-portfolio' ),
+			'id'            => 'footer-widget-' . $i,
 			'description'   => esc_html__( 'Add widgets here.', 'sb-portfolio' ),
 			'before_widget' => '<section id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
 			'after_title'   => '</h2>',
-		)
-	);
+		) );
 	endfor;
 }
+
 add_action( 'widgets_init', 'sb_portfolio_widgets_init' );
 
 /**
@@ -181,27 +223,28 @@ function sb_portfolio_scripts() {
 	/*
 	 * Custom Enqueue
 	 */
-	wp_enqueue_style('google-font-1','https://fonts.googleapis.com/css?family=Karla:400,700',array(),time());
-	wp_enqueue_style('google-font-2','https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700',array(),time());
-	wp_enqueue_style('animate.css',get_template_directory_uri().'/assets/css/animate.css',array(),time());
-	wp_enqueue_style('icomoon.css',get_template_directory_uri().'/assets/css/icomoon.css',array(),time());
-	wp_enqueue_style('bootstrap.css',get_template_directory_uri().'/assets/css/bootstrap.css',array(),time());
-	wp_enqueue_style('owl.carousel.min.css',get_template_directory_uri().'/assets/css/owl.carousel.min.css',array(),time());
-	wp_enqueue_style('owl.theme.default.min.css',get_template_directory_uri().'/assets/css/owl.theme.default.min.css',array(),time());
-	wp_enqueue_style('magnific-popup.css',get_template_directory_uri().'/assets/css/magnific-popup.css',array(),time());
-	wp_enqueue_style('style.css-theme',get_template_directory_uri().'/assets/css/style.css',array(),time());
+	wp_enqueue_style( 'google-font-1', 'https://fonts.googleapis.com/css?family=Karla:400,700', array(), time() );
+	wp_enqueue_style( 'google-font-2', 'https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700', array(), time() );
+	wp_enqueue_style( 'animate.css', get_template_directory_uri() . '/assets/css/animate.css', array(), time() );
+	wp_enqueue_style( 'icomoon.css', get_template_directory_uri() . '/assets/css/icomoon.css', array(), time() );
+	wp_enqueue_style( 'bootstrap.css', get_template_directory_uri() . '/assets/css/bootstrap.css', array(), time() );
+	wp_enqueue_style( 'owl.carousel.min.css', get_template_directory_uri() . '/assets/css/owl.carousel.min.css', array(), time() );
+	wp_enqueue_style( 'owl.theme.default.min.css', get_template_directory_uri() . '/assets/css/owl.theme.default.min.css', array(), time() );
+	wp_enqueue_style( 'magnific-popup.css', get_template_directory_uri() . '/assets/css/magnific-popup.css', array(), time() );
+	wp_enqueue_style( 'style.css-theme', get_template_directory_uri() . '/assets/css/style.css', array(), time() );
 
-	wp_enqueue_script('modernizr-2.6.2.min.js',get_template_directory_uri().'/assets/js/modernizr-2.6.2.min.js',array(),time(),false);
-	wp_enqueue_script('respond.min.js',get_template_directory_uri().'/assets/js/respond.min.js',array(),time(),false);
-	wp_enqueue_script('jquery.min.js',get_template_directory_uri().'/assets/js/jquery.min.js',array(),time(),true);
-	wp_enqueue_script('jquery.easing.1.3.js',get_template_directory_uri().'/assets/js/jquery.easing.1.3.js',array(),time(),true);
-	wp_enqueue_script('bootstrap.min.js',get_template_directory_uri().'/assets/js/bootstrap.min.js',array(),time(),true);
-	wp_enqueue_script('jquery.waypoints.min.js',get_template_directory_uri().'/assets/js/jquery.waypoints.min.js',array(),time(),true);
-	wp_enqueue_script('owl.carousel.min.js',get_template_directory_uri().'/assets/js/owl.carousel.min.js',array(),time(),true);
-	wp_enqueue_script('jquery.magnific-popup.min.js',get_template_directory_uri().'/assets/js/jquery.magnific-popup.min.js',array(),time(),true);
-	wp_enqueue_script('magnific-popup-options.js',get_template_directory_uri().'/assets/js/magnific-popup-options.js',array(),time(),true);
-	wp_enqueue_script('main.js',get_template_directory_uri().'/assets/js/main.js',array(),time(),true);
+	wp_enqueue_script( 'modernizr-2.6.2.min.js', get_template_directory_uri() . '/assets/js/modernizr-2.6.2.min.js', array(), time(), false );
+	wp_enqueue_script( 'respond.min.js', get_template_directory_uri() . '/assets/js/respond.min.js', array(), time(), false );
+	wp_enqueue_script( 'jquery.min.js', get_template_directory_uri() . '/assets/js/jquery.min.js', array(), time(), true );
+	wp_enqueue_script( 'jquery.easing.1.3.js', get_template_directory_uri() . '/assets/js/jquery.easing.1.3.js', array(), time(), true );
+	wp_enqueue_script( 'bootstrap.min.js', get_template_directory_uri() . '/assets/js/bootstrap.min.js', array(), time(), true );
+	wp_enqueue_script( 'jquery.waypoints.min.js', get_template_directory_uri() . '/assets/js/jquery.waypoints.min.js', array(), time(), true );
+	wp_enqueue_script( 'owl.carousel.min.js', get_template_directory_uri() . '/assets/js/owl.carousel.min.js', array(), time(), true );
+	wp_enqueue_script( 'jquery.magnific-popup.min.js', get_template_directory_uri() . '/assets/js/jquery.magnific-popup.min.js', array(), time(), true );
+	wp_enqueue_script( 'magnific-popup-options.js', get_template_directory_uri() . '/assets/js/magnific-popup-options.js', array(), time(), true );
+	wp_enqueue_script( 'main.js', get_template_directory_uri() . '/assets/js/main.js', array(), time(), true );
 }
+
 add_action( 'wp_enqueue_scripts', 'sb_portfolio_scripts' );
 
 /**
@@ -227,4 +270,6 @@ require get_template_directory() . '/inc/customizer.php';
 /**
  * Implementing Custom Post Types
  */
-require get_template_directory().'/cpts/work.php';
+require get_template_directory() . '/cpts/work.php';
+require get_template_directory() . '/cpts/testimony.php';
+require get_template_directory() . '/shortcodes/footer-shortcodes.php';

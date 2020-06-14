@@ -76,7 +76,11 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="colorlib-navbar-brand">
-                        <a class="colorlib-logo" href="index.html"><span>S</span><span>B</span></a>
+                        <a class="colorlib-logo" href="index.html"><span><?php bloginfo('site_title');?></span>
+<!--                            --><?php //if(!empty(bloginfo('description'))):?>
+                            <span><h6 class="site-description"><?php bloginfo('description');?></h6></span>
+<!--                            --><?php //endif; ?>
+                        </a>
                     </div>
                     <a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
                 </div>
